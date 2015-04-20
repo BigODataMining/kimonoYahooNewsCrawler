@@ -32,7 +32,7 @@ public class KimonoYahooNewsCrawler {
 			e.printStackTrace();
 		}
 		
-		results = Postprocess(results);
+		results = http.Postprocess(results);
 		
 		//print result
 //		System.out.println(response.toString());
@@ -50,7 +50,7 @@ public class KimonoYahooNewsCrawler {
 	 * @param results
 	 * @return
 	 */
-	private static ArrayList<YahooNews> Postprocess(ArrayList<YahooNews> results) {
+	private ArrayList<YahooNews> Postprocess(ArrayList<YahooNews> results) {
 		
 		String inputLine;
 		StringBuffer response = new StringBuffer();
@@ -73,7 +73,7 @@ public class KimonoYahooNewsCrawler {
 	 * 
 	 * @throws Exception
 	 */
-	public static ArrayList<YahooNews> requestKimono(String apiUrl) throws Exception 
+	public ArrayList<YahooNews> requestKimono(String apiUrl) throws Exception 
 	{	
 		ArrayList<YahooNews> list = new ArrayList<YahooNews>();	
 		URL obj = new URL(apiUrl);
@@ -98,6 +98,7 @@ public class KimonoYahooNewsCrawler {
 		// 存到 ArrayList 裡
 		while ((inputLine = in.readLine()) != null) {
 			YahooNews news = new YahooNews();
+			// 塞資料到 YahooNews 裡
 			news.setTitle("xxxx");
 			response.append(inputLine);
 		}
