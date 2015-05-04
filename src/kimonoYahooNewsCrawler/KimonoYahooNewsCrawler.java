@@ -1,12 +1,13 @@
 package kimonoYahooNewsCrawler;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
 public class KimonoYahooNewsCrawler {
 
@@ -18,19 +19,19 @@ public class KimonoYahooNewsCrawler {
 
 		System.out.println("Testing 1 - Send Http GET request");
 		
-		String url = "https://www.kimonolabs.com/api/csv/88bg0pgg?apikey=2TDrs1qpNRiDdO8W6I1eq0AYiPl7j2eQ";		
-		//ArrayList<String> results = http.requestKimono(url);
+		String url = "https://www.kimonolabs.com/api/csv/bdt7rxv4?apikey=2TDrs1qpNRiDdO8W6I1eq0AYiPl7j2eQ";		
+		ArrayList<YahooNews> results = http.requestKimono(url);
 		
-		ArrayList<YahooNews> results = new ArrayList<YahooNews>(); 
-		BufferedReader in;
-		try {
-			in = new BufferedReader(
-			        new InputStreamReader(new FileInputStream("input_text.txt")));
-			// 讀檔進 ArrayList
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		ArrayList<YahooNews> results = new ArrayList<YahooNews>(); 
+//		BufferedReader in;
+//		try {
+//			in = new BufferedReader(
+//			        new InputStreamReader(new FileInputStream("input_text.txt")));
+//			// 讀檔進 ArrayList
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		results = http.Postprocess(results);
 		
@@ -91,17 +92,30 @@ public class KimonoYahooNewsCrawler {
  
 		// 修正編碼
 		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
+		        new InputStreamReader(con.getInputStream(), "UTF-8"));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
  
 		// 存到 ArrayList 裡
 		while ((inputLine = in.readLine()) != null) {
-			YahooNews news = new YahooNews();
-			// 塞資料到 YahooNews 裡
-			news.setTitle("xxxx");
 			response.append(inputLine);
 		}
+		
+		// 用  Apache Common CSV 去分析
+		Reader in = new StringReader(response.toString());
+		CSVParser parser = new CSVParser(in, CSVFormat.EXCEL);
+		List<CSVRecord> list = parser.getRecords();
+		for (int i = 0; i < list.length; i++) {	
+			
+			YahooNews news = new YahooNews();
+			// 塞資料到 YahooNews 裡
+			news.setTitle(list[i].get(0));	
+			news.setTitle(list[i].get(1));
+			news.setTitle(list[i].get(2));
+			news.setTitle(list[i].get(0));
+		}
+		
+		
 		in.close();
  
 //		
