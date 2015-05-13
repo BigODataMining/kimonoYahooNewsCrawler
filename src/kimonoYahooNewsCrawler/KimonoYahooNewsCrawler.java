@@ -1,13 +1,19 @@
 package kimonoYahooNewsCrawler;
 
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.csv.CSVParser;
 
 public class KimonoYahooNewsCrawler {
 
@@ -16,9 +22,6 @@ public class KimonoYahooNewsCrawler {
 	public static void main(String[] args) throws Exception {
 
 		KimonoYahooNewsCrawler http = new KimonoYahooNewsCrawler();
-
-		System.out.println("Testing 1 - Send Http GET request");
-		
 		String url = "https://www.kimonolabs.com/api/csv/bdt7rxv4?apikey=2TDrs1qpNRiDdO8W6I1eq0AYiPl7j2eQ";		
 		ArrayList<YahooNews> results = http.requestKimono(url);
 		
@@ -102,21 +105,24 @@ public class KimonoYahooNewsCrawler {
 		}
 		
 		// 用  Apache Common CSV 去分析
-		Reader in = new StringReader(response.toString());
+		Reader in1 = new StringReader(response.toString());
 		CSVParser parser = new CSVParser(in, CSVFormat.EXCEL);
-		List<CSVRecord> list = parser.getRecords();
-		for (int i = 0; i < list.length; i++) {	
+		List<CSVRecord> csvRecords = parser.getRecords();
+		for (int i = 1; i < csvRecords.size(); i++) {	
 			
 			YahooNews news = new YahooNews();
 			// 塞資料到 YahooNews 裡
-			news.setTitle(list[i].get(0));	
-			news.setTitle(list[i].get(1));
-			news.setTitle(list[i].get(2));
-			news.setTitle(list[i].get(0));
+			  CSVRecord record = csvRecords.get(i);
+			  news=(record.get(),
+                      record.get(), record.get(),
+                      list.add(news);
+			  for (YahooNews news : list) {
+	                System.out.println(news.toString());
+	            }
 		}
 		
 		
-		in.close();
+		in1.close();
  
 //		
 		return list;
